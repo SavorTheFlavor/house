@@ -29,5 +29,20 @@ spring:
     # 空闲连接最小空闲时间(evict: 驱逐)
     minEvictableIdleTimeMillis: 300000
 
+# somewhere
+# @ConfigurationProperties(prefix = "spring.freemarker")
+# FreeMarkerConfigurer
+  freemarker:
+    charset: UTF-8
+    content-type: text/html;charset=UTF-8
+    expose-request-attributes: true # 使得request中的属性可以直接在模板中使用(${...}})
+    expose-session-attributes: true
+    expose-spring-macro-helpers: true
+    suffix: .ftl
+    settings:
+      datetime_format: yyyy-MM-dd HH:mm:ss
+      default_encoding: UTF-8
+
+
 mybatis:
   config-location: classpath:/mybatis/mybatis-conf.xml
