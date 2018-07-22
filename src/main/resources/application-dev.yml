@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    # mysql-connector在高版本情况下url需加上后缀serverTimezone=...
+    url: jdbc:mysql://localhost:3306/houses?characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: 23456
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  config-location: classpath:/mybatis/mybatis-conf.xml
