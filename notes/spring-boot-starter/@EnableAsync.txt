@@ -1,0 +1,2 @@
+是除了@EnableAutoConfiguration、@SpringBootApplication(实际上包含@EnableAutoConfiguration)之外的
+另一个自动配置的入口(自动加载AutoConfiguration)

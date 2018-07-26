@@ -1,0 +1,91 @@
+springboot中的spring-boot-autoconfigure包含了大量的第三方依赖的autoconfigure，
+JavaConfig(Java类方式的Bean配置)的形式
+
+@SpringBootConfiguration:
+1. @EnableAutoConfiguration，使得springboot自动加载META-INF文件夹中spring.factories里定义的AutoConfiguration(org.springframework.boot.autoconfigure.EnableAutoConfiguration=...,...,...,...)
+2. @Configuration
+3. @ComponentScan
+
+eg.
+mybatis.spring.boot.autoconfigure:
+
+/*表示这是一个JavaConfig，里面带bean注解的方法的返回值会被Spring容器管理*/
+@Configuration		
+/*在SqlSessionFactory.class, SqlSessionFactoryBean.class存在的情况下才加载这个MybatisAutoConfiguration*/
+@ConditionalOnClass({SqlSessionFactory.class, SqlSessionFactoryBean.class}) 
+/*在存在DataSource这个bean的情况下，才加载这个MybatisAutoConfiguration*/
+@ConditionalOnBean({DataSource.class})
+/* 将MybatisProperties作为bean引入进来, 使其支持@ConfigurationProperties */
+@EnableConfigurationProperties({MybatisProperties.class})
+/* 在DataSourceAutoConfiguration配置之后才配置MybatisAutoConfiguration */
+@AutoConfigureAfter({DataSourceAutoConfiguration.class})
+public class MybatisAutoConfiguration {
+     private static final Logger logger = LoggerFactory.getLogger(MybatisAutoConfiguration.class);
+    private final MybatisProperties properties;
+    private final Interceptor[] interceptors;
+    private final ResourceLoader resourceLoader;
+    private final DatabaseIdProvider databaseIdProvider;
+
+    public MybatisAutoConfiguration(MybatisProperties properties, ObjectProvider<Interceptor[]> interceptorsProvider, ResourceLoader resourceLoader, ObjectProvider<DatabaseIdProvider> databaseIdProvider) {
+        this.properties = properties;
+        this.interceptors = (Interceptor[])interceptorsProvider.getIfAvailable();
+        this.resourceLoader = resourceLoader;
+        this.databaseIdProvider = (DatabaseIdProvider)databaseIdProvider.getIfAvailable();
+    }
+
+    @PostConstruct
+    public void checkConfigFileExists() {
+        if(this.properties.isCheckConfigLocation() && StringUtils.hasText(this.properties.getConfigLocation())) {
+            Resource resource = this.resourceLoader.getResource(this.properties.getConfigLocation());
+            Assert.state(resource.exists(), "Cannot find config location: " + resource + " (please add config file or check your Mybatis configuration)");
+        }
+
+    }
+
+    @Bean
+    @ConditionalOnMissingBean //没有这个bean的时候才配置
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setVfs(SpringBootVFS.class);
+        if(StringUtils.hasText(this.properties.getConfigLocation())) {
+            factory.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
+        }
+
+        factory.setConfiguration(this.properties.getConfiguration());
+        if(this.properties.getConfigurationProperties() != null) {
+            factory.setConfigurationProperties(this.properties.getConfigurationProperties());
+        }
+
+        if(!ObjectUtils.isEmpty(this.interceptors)) {
+            factory.setPlugins(this.interceptors);
+        }
+
+        if(this.databaseIdProvider != null) {
+            factory.setDatabaseIdProvider(this.databaseIdProvider);
+        }
+
+        if(StringUtils.hasLength(this.properties.getTypeAliasesPackage())) {
+            factory.setTypeAliasesPackage(this.properties.getTypeAliasesPackage());
+        }
+
+        if(StringUtils.hasLength(this.properties.getTypeHandlersPackage())) {
+            factory.setTypeHandlersPackage(this.properties.getTypeHandlersPackage());
+        }
+
+        if(!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
+            factory.setMapperLocations(this.properties.resolveMapperLocations());
+        }
+
+        return factory.getObject();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+        ExecutorType executorType = this.properties.getExecutorType();
+        return executorType != null?new SqlSessionTemplate(sqlSessionFactory, executorType):new SqlSessionTemplate(sqlSessionFactory);
+    }
+    
+    //.....
+}
