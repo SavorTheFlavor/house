@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+#spring:
+#  datasource:
+#    # mysql-connector在高版本情况下url需加上后缀serverTimezone=...
+#    url: jdbc:mysql://localhost:3306/house?characterEncoding=UTF-8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+#    username: root
+#    password: 23456
+#    driver-class-name: com.mysql.jdbc.Driver
+spring:
+  druid:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/houses?characterEncoding=UTF-8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: 23456
+    # 最大连接数
+    maxActive: 30
+    # 最小连接数
+    minIdle: 5
+    # 获取连接时的最大等待时间
+    maxWait: 10000
+    # 解决mysql8小时的问题(当一个连接的空闲时间超过8小时后，MySql会断开该连接，
+    # 而连接池则以为该连接依然有效，就会把失效的连接返回给客户端..)
+    # 这里使用SELECT 'x'语句来检验连接是否还有效
+    validationQuery: SELECT 'x'
+    # 空闲连接检查时间间隔
+    timeBetweenEvictionRunsMillis: 60000
+    # 空闲连接最小空闲时间(evict: 驱逐)
+    minEvictableIdleTimeMillis: 300000
+
+# somewhere
+# @ConfigurationProperties(prefix = "spring.freemarker")
+# FreeMarkerConfigurer
+  freemarker:
+    charset: UTF-8
+    content-type: text/html;charset=UTF-8
+    expose-request-attributes: true # 使得request中的属性可以直接在模板中使用(${...}})
+    expose-session-attributes: true
+    expose-spring-macro-helpers: true
+    suffix: .ftl
+    settings:
+      datetime_format: yyyy-MM-dd HH:mm:ss
+      default_encoding: UTF-8
+      #自动导入common.ftl作为common变量给其他模板引用;引用里面定义的宏:@common.header,..
+      auto_import: common/common.ftl as common
+
+
+mybatis:
+  config-location: classpath:/mybatis/mybatis-conf.xml
