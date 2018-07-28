@@ -20,7 +20,7 @@ public class LogFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        logger.info("a request is comming.....");
+        //logger.info("a request is comming.....");
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
