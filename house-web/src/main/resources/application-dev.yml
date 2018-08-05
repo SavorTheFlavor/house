@@ -48,3 +48,7 @@ spring:
 
 mybatis:
   config-location: classpath:/mybatis/mybatis-conf.xml
+
+# 上传文件的存储路径
+file:
+  path: D:/tmp

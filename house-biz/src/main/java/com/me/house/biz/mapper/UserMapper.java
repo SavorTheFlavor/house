@@ -10,5 +10,7 @@ import java.util.List;
  */
 @Mapper
 public interface UserMapper {
-    public List<User> selectUsers();
+    List<User> selectUsers();
+
+    int insert(User account);
 }
