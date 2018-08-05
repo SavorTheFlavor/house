@@ -16,4 +16,6 @@ public interface UserMapper {
     int insert(User account);
 
     void delete(@Param("email") String email);
+
+    void update(User user);
 }

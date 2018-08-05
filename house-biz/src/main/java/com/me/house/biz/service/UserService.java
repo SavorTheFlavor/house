@@ -9,10 +9,8 @@ import com.me.house.biz.mapper.UserMapper;
 import com.me.house.common.model.User;
 import com.me.house.common.utils.BeanHelper;
 import com.me.house.common.utils.HashUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,22 +68,16 @@ public class UserService {
         BeanHelper.onInsert(account);
         account.setEnable(0);
         userMapper.insert(account);
-        registerNotify(account.getEmail());
-        return false;
+        mailService.registerNotify(account.getEmail()); //这方法带有@Async注解，使用到了AOP，要使注解生效，必须将该方法放到其他类中
+        return true;
     }
 
     /**
-     * 1.缓存key-email的关系
-     * 2.借助spring mail 发送邮件
-     * 3.借助异步框架进行异步操作(因为发邮件是一个比较耗时的操作)
-     * @param email
+     * 激活key关联的邮箱账号
+     * @param key
+     * @return
      */
-    @Async
-    private void registerNotify(String email) {
-        // Creates a random string whose length is the number of parameter 'count'
-        String randomKey = RandomStringUtils.randomAlphabetic(10);
-        registerCache.put(randomKey, email);
-        String verifyUrl = "http://" + domainName + "/accounts/verify?key=" + randomKey;
-        mailService.sendMail("house selling platform：account activation", verifyUrl, email);
+    public boolean enable(String key) {
+        return mailService.enable(key);
     }
 }
