@@ -45,6 +45,19 @@ spring:
       #自动导入common.ftl作为common变量给其他模板引用;引用里面定义的宏:@common.header,..
       auto_import: common/common.ftl as common
 
+  # spring boot mail
+  mail:
+    host: smtp.163.com
+    username: unravel137222@163.com
+    password: 1231231
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true # 使用starttls协议(加密连接（TLS或SSL）的纯文本通信协议)
+            required: true
+
 
 mybatis:
   config-location: classpath:/mybatis/mybatis-conf.xml
@@ -52,3 +65,8 @@ mybatis:
 # 上传文件的存储路径
 file:
   path: D:/tmp
+
+domain:
+  name: 127.0.0.1
+
+
