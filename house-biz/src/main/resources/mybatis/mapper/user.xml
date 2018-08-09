@@ -8,6 +8,27 @@
         SELECT id, name, phone, email FROM user;
     </select>
 
+    <select id="selectByUserCodition" resultType="user">
+        SELECT * FROM user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="email != null">
+                and email = #{email}
+            </if>
+            <if test="passwd != null">
+                and passwd = #{passwd}
+            </if>
+            <if test="enable != null">
+                and enable = #{enable}
+            </if>
+            <if test="type != null and type != 0">
+                and type = #{type}
+            </if>
+        </where>
+    </select>
+
     <insert id="insert">
         insert into user (
         name,
@@ -59,5 +80,6 @@
         </set>
         WHERE email = #{email}
     </update>
+
 
 </mapper>

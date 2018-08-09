@@ -46,6 +46,9 @@ public class UserService {
     @Value("${domain.name}")
     private String domainName;
 
+    @Value("${file.prefix}")
+    private String imgPrefixPath;
+
     public List<User> getUsers() {
         return userMapper.selectUsers();
     }
@@ -79,5 +82,30 @@ public class UserService {
      */
     public boolean enable(String key) {
         return mailService.enable(key);
+    }
+
+    /**
+     * username and password authorizes
+     * @param username
+     * @param password
+     * @return
+     */
+    public User auth(String username, String password) {
+        User user = new User();
+        user.setEmail(username);
+        user.setPasswd(HashUtils.encryptPassword(password));
+        user.setEnable(1);
+        List<User> list = getUserByCondition(user);
+        if(list.isEmpty()){
+            return null;
+        }else{
+            return list.get(0);
+        }
+    }
+
+    public List<User> getUserByCondition(User user) {
+        List<User> list = userMapper.selectByUserCondition(user);
+        list.forEach(u -> u.setAvatar(imgPrefixPath + u.getAvatar()));
+        return list;
     }
 }

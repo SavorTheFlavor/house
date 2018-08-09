@@ -18,4 +18,6 @@ public interface UserMapper {
     void delete(@Param("email") String email);
 
     void update(User user);
+
+    List<User> selectByUserCondition(User user);
 }

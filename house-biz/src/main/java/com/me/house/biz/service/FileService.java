@@ -28,7 +28,7 @@ public class FileService {
                 File localFile = null;
                 try{
                     localFile = saveToLocal(file, filePath);
-                    // eg. filePath/20180722/a.jpg --> 20180722/a.jpg, relative path
+                    // eg. filePath/20180722/a.jpg --> /20180722/a.jpg, relative path
                     String path = StringUtils.substringAfter(localFile.getAbsolutePath(), filePath);
                     paths.add(path);
                 }catch (Exception e){
