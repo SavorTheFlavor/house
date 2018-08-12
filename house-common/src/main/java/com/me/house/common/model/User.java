@@ -23,11 +23,11 @@ public class User {
 
     private Integer type;//普通用户1，经纪人2
 
-    private Date   createTime;
+    private Date createTime;
 
     private Integer enable;
 
-    private String  avatar;
+    private String avatar;
 
     private MultipartFile avatarFile;
 
@@ -35,7 +35,7 @@ public class User {
 
     private String key; //验证邮箱时的key
 
-    private Long   agencyId;
+    private Long agencyId;
 
     private String aboutme;
 
@@ -170,5 +170,25 @@ public class User {
         this.id = id;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", name='" + name + '\'' +
+                ", passwd='" + passwd + '\'' +
+                ", confirmPasswd='" + confirmPasswd + '\'' +
+                ", type=" + type +
+                ", createTime=" + createTime +
+                ", enable=" + enable +
+                ", avatar='" + avatar + '\'' +
+                ", avatarFile=" + avatarFile +
+                ", newPassword='" + newPassword + '\'' +
+                ", key='" + key + '\'' +
+                ", agencyId=" + agencyId +
+                ", aboutme='" + aboutme + '\'' +
+                ", agencyName='" + agencyName + '\'' +
+                '}';
+    }
 }

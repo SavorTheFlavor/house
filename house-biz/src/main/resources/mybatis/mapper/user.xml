@@ -8,7 +8,7 @@
         SELECT id, name, phone, email FROM user;
     </select>
 
-    <select id="selectByUserCodition" resultType="user">
+    <select id="selectByUserCondition" resultType="user">
         SELECT * FROM user
         <where>
             <if test="id != null">

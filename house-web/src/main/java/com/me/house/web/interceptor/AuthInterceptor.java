@@ -34,7 +34,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
         HttpSession session = request.getSession(true);
-        User user = (User)session.getAttribute(CommonConstants.USER_ATTRIBUTE);
+        User user = (User)session.getAttribute(CommonConstants.LOGIN_USER_KEY);
         if(user != null){
             //将user存到threadlocal中
             UserContext.setUser(user);

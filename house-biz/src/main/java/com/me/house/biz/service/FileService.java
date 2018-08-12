@@ -24,7 +24,7 @@ public class FileService {
     public List<String> saveFiles(List<MultipartFile> files){
         List<String> paths = Lists.newArrayList();
         files.forEach(file -> {
-            if(!file.isEmpty()){
+            if(file != null && !file.isEmpty()){
                 File localFile = null;
                 try{
                     localFile = saveToLocal(file, filePath);

@@ -38,9 +38,15 @@ public class BeanHelper {
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     throw new RuntimeException("can not set property  when get for " + target + " and clazz " + clazz + " field " + fieldName);
                 }
-            } else if (Number.class.isAssignableFrom(propertyDescriptor.getPropertyType()) && value == null) {
+            } else if (Integer.class.isAssignableFrom(propertyDescriptor.getPropertyType()) && value == null) {
                 try {
-                    PropertyUtils.setProperty(target, fieldName, 0);
+                    PropertyUtils.setProperty(target, fieldName, -1);
+                } catch (Exception e) {
+                    throw new RuntimeException("can not set property when set for " + target + " and clazz " + clazz + " field " + fieldName);
+                }
+            }else if (Long.class.isAssignableFrom(propertyDescriptor.getPropertyType()) && value == null) {
+                try {
+                    PropertyUtils.setProperty(target, fieldName, -1L);
                 } catch (Exception e) {
                     throw new RuntimeException("can not set property when set for " + target + " and clazz " + clazz + " field " + fieldName);
                 }
@@ -62,6 +68,8 @@ public class BeanHelper {
     public static <T> void onUpdate(T target){
         try {
             PropertyUtils.setProperty(target, updateTimeKey, System.currentTimeMillis());
+            Class<T> clazz = (Class<T>)target.getClass();
+            setDefaultProp(target, clazz);
         } catch (Exception e) {
         }
     }

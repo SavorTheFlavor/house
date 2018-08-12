@@ -61,7 +61,7 @@ public class MailService {
      * 3.借助异步框架进行异步操作(因为发邮件是一个比较耗时的操作)
      * @param email
      */
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void registerNotify(String email) {
         // Creates a random string whose length is the number of parameter 'count'
         String randomKey = RandomStringUtils.randomAlphabetic(10);

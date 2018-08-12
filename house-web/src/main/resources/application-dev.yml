@@ -48,8 +48,8 @@ spring:
   # spring boot mail
   mail:
     host: smtp.163.com
-    username: unravel124142@163.com
-    password: 1231124
+    username: unrqweqwrq@163.com
+    password: Vqqqwrqw
     properties:
       mail:
         smtp:
