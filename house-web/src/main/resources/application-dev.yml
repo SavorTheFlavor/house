@@ -1,5 +1,5 @@
 server:
-  port: 8803
+  port: 8080
 
 #spring:
 #  datasource:
@@ -65,7 +65,7 @@ mybatis:
 # 上传文件的存储路径
 file:
   path: /usr/local/house/imgs
-  prefix: http://127.0.0.1:8081/images
+  prefix: http://127.0.0.1:8080/images
 
 domain:
   name: 127.0.0.1

@@ -14,10 +14,13 @@
 
     <typeAliases>
         <typeAlias type="com.me.house.common.model.User" alias="user"/>
+        <typeAlias type="com.me.house.common.model.House" alias="house"/>
+        <typeAlias type="com.me.house.common.model.Community" alias="community"/>
     </typeAliases>
 
     <mappers>
         <mapper resource="mybatis/mapper/user.xml" />
+        <mapper resource="mybatis/mapper/house.xml" />
     </mappers>
 
 </configuration>

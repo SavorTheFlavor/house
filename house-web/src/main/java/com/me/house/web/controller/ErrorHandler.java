@@ -17,6 +17,7 @@ public class ErrorHandler {
     @ExceptionHandler(value = {Exception.class})
     public String error500(HttpServletRequest request, Exception e){
         logger.error(request.getRequestURI() + ": encounter 500: "+ e.getMessage());
+        e.printStackTrace(); // for debug
         return "error/500";
     }
 }
