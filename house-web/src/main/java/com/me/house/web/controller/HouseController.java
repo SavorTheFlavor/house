@@ -8,7 +8,9 @@ import com.me.house.common.constant.CommonConstants;
 import com.me.house.common.model.*;
 import com.me.house.common.page.PageData;
 import com.me.house.common.page.PageParams;
+import com.me.house.common.result.ResultMsg;
 import com.me.house.web.interceptor.UserContext;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -73,4 +75,33 @@ public class HouseController {
         modelMap.put("pageType", "own");
         return "/house/ownlist";
     }
+
+    /**
+     * 查询房屋详情
+     * 查询关联经纪人
+     * @param id
+     * @return
+     */
+    @RequestMapping("house/detail")
+    public String houseDetail(@Param("id") Long id, ModelMap modelMap){
+        House house = houseService.queryOneHouse(id);
+        HouseUser houseUser = houseService.getHouseUser(id);
+//        recommendService.increase(id);
+//        List<Comment> comments = commentService.getHouseComments(id,8);
+        if (houseUser != null && houseUser.getUserId() != null && !houseUser.getUserId().equals(0)) {
+            modelMap.put("agent", agencyService.getAgentDeail(houseUser.getUserId()));
+        }
+//        List<House> rcHouses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
+//        modelMap.put("recomHouses", rcHouses);
+        modelMap.put("house", house);
+//        modelMap.put("commentList", comments);
+        return "/house/detail";
+    }
+
+    @RequestMapping("house/leaveMsg")
+    public String houseMsg(UserMsg userMsg){
+        houseService.addUserMsg(userMsg);
+        return "redirect:/house/detail?id=" + userMsg.getHouseId() + ResultMsg.successMsg("留言成功").asUrlParams();
+    }
+
 }
