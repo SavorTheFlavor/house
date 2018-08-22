@@ -2,6 +2,8 @@ package com.me.house.biz.mapper;
 
 import com.me.house.common.model.Community;
 import com.me.house.common.model.House;
+import com.me.house.common.model.HouseUser;
+import com.me.house.common.model.UserMsg;
 import com.me.house.common.page.PageParams;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,4 +22,19 @@ public interface HouseMapper {
     int insert(@Param("house") House house);
 
     List<Community> selectCommunity(@Param("community") Community community);
+
+    HouseUser selectHouseUser(@Param("userId")Long userId, @Param("id") Long houseId, @Param("type") Integer integer);
+
+    HouseUser selectSaleHouseUser(@Param("id") Long houseId);
+
+    int insertHouseUser(HouseUser houseUser);
+
+    int insertUserMsg(UserMsg userMsg);
+
+    int updateHouse(House updateHouse);
+
+     int downHouse(Long id);
+
+    int deleteHouseUser(@Param("id")Long id,@Param("userId") Long userId,@Param("type") Integer value);
+
 }

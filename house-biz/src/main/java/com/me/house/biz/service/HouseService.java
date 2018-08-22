@@ -1,11 +1,14 @@
 package com.me.house.biz.service;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.me.house.biz.mapper.HouseMapper;
-import com.me.house.common.model.Community;
-import com.me.house.common.model.House;
+import com.me.house.common.constant.HouseUserType;
+import com.me.house.common.model.*;
 import com.me.house.common.page.PageData;
 import com.me.house.common.page.PageParams;
+import com.me.house.common.utils.BeanHelper;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,15 @@ public class HouseService {
 
     @Autowired
     private HouseMapper houseMapper;
+
+    @Autowired
+    private FileService fileService;
+
+    @Autowired
+    private AgencyService agencyService;
+
+    @Autowired
+    private MailService mailService;
 
     public PageData<House> queryHouse(House queryCondition, PageParams page) {
         if(!Strings.isNullOrEmpty(queryCondition.getName())){
@@ -48,5 +60,68 @@ public class HouseService {
             h.setFloorPlanList(h.getFloorPlanList().stream().map(pic -> imgPrefix + pic).collect(Collectors.toList()));
         });
         return houseList;
+    }
+
+    public List<Community> getAllCommunitys() {
+        Community community = new Community();
+        return houseMapper.selectCommunity(community);
+    }
+
+    /**
+     * 添加房屋图片
+     * 添加户型图片
+     * 插入房产信息
+     * 绑定用户到房产的关系
+     * @param house
+     * @param user
+     */
+    public void addHouse(House house, User user) {
+        if (CollectionUtils.isNotEmpty(house.getHouseFiles())) {
+            String images = Joiner.on(",").join(fileService.saveFiles(house.getHouseFiles()));
+            house.setImages(images);
+        }
+        if (CollectionUtils.isNotEmpty(house.getFloorPlanFiles())) {
+            String images = Joiner.on(",").join(fileService.saveFiles(house.getFloorPlanFiles()));
+            house.setFloorPlan(images);
+        }
+        BeanHelper.onInsert(house);
+        houseMapper.insert(house);
+        bindUser2House(house.getId(),user.getId(),false);
+    }
+
+    public void bindUser2House(Long houseId, Long userId, boolean collect) {
+        HouseUser existhouseUser =     houseMapper.selectHouseUser(userId,houseId,collect ? HouseUserType.BOOKMARK.value : HouseUserType.SALE.value);
+        if (existhouseUser != null) {
+            return;
+        }
+        HouseUser houseUser = new HouseUser();
+        houseUser.setHouseId(houseId);
+        houseUser.setUserId(userId);
+        houseUser.setType(collect ? HouseUserType.BOOKMARK.value : HouseUserType.SALE.value);
+        BeanHelper.setDefaultProp(houseUser, HouseUser.class);
+        BeanHelper.onInsert(houseUser);
+        houseMapper.insertHouseUser(houseUser);
+    }
+
+    public HouseUser getHouseUser(Long houseId){
+        HouseUser houseUser =  houseMapper.selectSaleHouseUser(houseId);
+        return houseUser;
+    }
+
+    public House queryOneHouse(Long id) {
+        House query = new House();
+        query.setId(id);
+        List<House> houses = queryAndSetImg(query, PageParams.build(1, 1));
+        if (!houses.isEmpty()) {
+            return houses.get(0);
+        }
+        return null;
+    }
+
+    public void addUserMsg(UserMsg userMsg) {
+        BeanHelper.onInsert(userMsg);
+        houseMapper.insertUserMsg(userMsg);
+        User agent = agencyService.getAgentDeail(userMsg.getAgentId());
+        mailService.sendMail("来自用户"+userMsg.getEmail()+"的留言", userMsg.getMsg(), agent.getEmail());
     }
 }

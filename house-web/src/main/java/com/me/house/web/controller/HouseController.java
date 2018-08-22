@@ -1,11 +1,14 @@
 package com.me.house.web.controller;
 
 import com.google.common.base.Strings;
+import com.me.house.biz.service.AgencyService;
+import com.me.house.biz.service.CityService;
 import com.me.house.biz.service.HouseService;
-import com.me.house.common.model.Community;
-import com.me.house.common.model.House;
+import com.me.house.common.constant.CommonConstants;
+import com.me.house.common.model.*;
 import com.me.house.common.page.PageData;
 import com.me.house.common.page.PageParams;
+import com.me.house.web.interceptor.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +26,12 @@ public class HouseController {
     @Autowired
     private HouseService houseService;
 
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private AgencyService agencyService;
+
     /**
      * 1.分页
      * 2.小区搜索、类型搜索
@@ -39,4 +48,29 @@ public class HouseController {
         return "house/listing";
     }
 
+
+    @RequestMapping("/house/toAdd")
+    public String toAdd(ModelMap modelMap) {
+        modelMap.put("citys", cityService.getAllCitys());
+        modelMap.put("communitys", houseService.getAllCommunitys());
+        return "/house/add";
+    }
+
+    @RequestMapping("/house/add")
+    public String doAdd(House house){
+        User user = UserContext.getUser();
+        house.setState(CommonConstants.HOUSE_STATE_UP);
+        houseService.addHouse(house,user);
+        return "redirect:/house/ownlist";
+    }
+
+    @RequestMapping("house/ownlist")
+    public String ownlist(House house,Integer pageNum,Integer pageSize,ModelMap modelMap){
+        User user = UserContext.getUser();
+        house.setUserId(user.getId());
+        house.setBookmarked(false);
+        modelMap.put("ps", houseService.queryHouse(house, PageParams.build(pageSize, pageNum)));
+        modelMap.put("pageType", "own");
+        return "/house/ownlist";
+    }
 }
