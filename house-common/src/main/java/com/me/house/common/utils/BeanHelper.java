@@ -50,6 +50,12 @@ public class BeanHelper {
                 } catch (Exception e) {
                     throw new RuntimeException("can not set property when set for " + target + " and clazz " + clazz + " field " + fieldName);
                 }
+            }else if (Double.class.isAssignableFrom(propertyDescriptor.getPropertyType()) && value == null) {
+                try {
+                    PropertyUtils.setProperty(target, fieldName, 0.0);
+                } catch (Exception e) {
+                    throw new RuntimeException("can not set property when set for " + target + " and clazz " + clazz + " field " + fieldName);
+                }
             }else if (Date.class.isAssignableFrom(propertyDescriptor.getPropertyType()) && value == null) {
                 try {
                     PropertyUtils.setProperty(target, fieldName, new Date());

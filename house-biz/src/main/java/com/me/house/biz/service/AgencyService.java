@@ -27,7 +27,7 @@ public class AgencyService {
    * @param userId
    * @return
    */
-  public User getAgentDeail(Long userId) {
+  public User getAgentDetail(Long userId) {
     User user = new User();
     user.setId(userId);
     user.setType(2);

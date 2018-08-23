@@ -69,7 +69,7 @@ public class UserController {
         }
         User user = userService.auth(username, password);
         if(user == null){
-            return "redirect:/user/accounts/signin?" + "target=" + target
+            return "redirect:/accounts/signin?" + "target=" + target
                     + "&username=" + username + "&" + ResultMsg.errorMsg("用户名或密码错误").asUrlParams();
         }else{
             HttpSession session = req.getSession(true);

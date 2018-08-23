@@ -11,7 +11,7 @@ server:
 spring:
   druid:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/house?characterEncoding=UTF-8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://47.106.115.184:3306/house?characterEncoding=UTF-8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password: 23456
     # 最大连接数

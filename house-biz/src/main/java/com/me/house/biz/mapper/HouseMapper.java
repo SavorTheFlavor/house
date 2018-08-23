@@ -19,9 +19,9 @@ public interface HouseMapper {
 
     Long selectRecordsCount(@Param("house") House queryCondition); //必须添加@Param("house") ，不然在mapper.xml中使用house.id什么的就不知道这个house是什么了
 
-    int insert(@Param("house") House house);
+    int insert(House house);
 
-    List<Community> selectCommunity(@Param("community") Community community);
+    List<Community> selectCommunity(Community community);
 
     HouseUser selectHouseUser(@Param("userId")Long userId, @Param("id") Long houseId, @Param("type") Integer integer);
 

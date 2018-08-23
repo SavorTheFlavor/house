@@ -121,7 +121,7 @@ public class HouseService {
     public void addUserMsg(UserMsg userMsg) {
         BeanHelper.onInsert(userMsg);
         houseMapper.insertUserMsg(userMsg);
-        User agent = agencyService.getAgentDeail(userMsg.getAgentId());
+        User agent = agencyService.getAgentDetail(userMsg.getAgentId());
         mailService.sendMail("来自用户"+userMsg.getEmail()+"的留言", userMsg.getMsg(), agent.getEmail());
     }
 }

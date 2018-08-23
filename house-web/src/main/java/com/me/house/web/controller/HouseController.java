@@ -1,6 +1,5 @@
 package com.me.house.web.controller;
 
-import com.google.common.base.Strings;
 import com.me.house.biz.service.AgencyService;
 import com.me.house.biz.service.CityService;
 import com.me.house.biz.service.HouseService;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 /**
  * Created by Administrator on 2018/8/18.
@@ -89,7 +86,7 @@ public class HouseController {
 //        recommendService.increase(id);
 //        List<Comment> comments = commentService.getHouseComments(id,8);
         if (houseUser != null && houseUser.getUserId() != null && !houseUser.getUserId().equals(0)) {
-            modelMap.put("agent", agencyService.getAgentDeail(houseUser.getUserId()));
+            modelMap.put("agent", agencyService.getAgentDetail(houseUser.getUserId()));
         }
 //        List<House> rcHouses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
 //        modelMap.put("recomHouses", rcHouses);
