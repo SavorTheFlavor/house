@@ -52,7 +52,7 @@ public class HouseService {
         return PageData.buildPage(houseList, count, page.getPageSize(), page.getPageNum());
     }
 
-    private List<House> queryAndSetImg(House queryCondition, PageParams page) {
+    public List<House> queryAndSetImg(House queryCondition, PageParams page) {
         List<House> houseList = houseMapper.selectHouseByPage(queryCondition, page);
         houseList.forEach(h -> {
             h.setFirstImg(imgPrefix + h.getFirstImg());
