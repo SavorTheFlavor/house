@@ -18,12 +18,16 @@
         <typeAlias type="com.me.house.common.model.HouseUser" alias="houseUser"/>
         <typeAlias type="com.me.house.common.model.Community" alias="community"/>
         <typeAlias type="com.me.house.common.model.Agency" alias="agency"/>
+        <typeAlias type="com.me.house.common.model.Comment" alias="comment"/>
+        <typeAlias type="com.me.house.common.model.Blog" alias="blog"/>
     </typeAliases>
 
     <mappers>
         <mapper resource="mybatis/mapper/user.xml" />
         <mapper resource="mybatis/mapper/house.xml" />
         <mapper resource="mybatis/mapper/agency.xml" />
+        <mapper resource="mybatis/mapper/comment.xml" />
+        <mapper resource="mybatis/mapper/blog.xml" />
     </mappers>
 
 </configuration>
