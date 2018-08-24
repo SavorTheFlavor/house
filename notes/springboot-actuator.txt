@@ -1,0 +1,9 @@
+json接口查看springboot运行状况
+/health
+/autoconfig
+/beans
+/mappings
+/metrics
+/env
+/dump
+.............

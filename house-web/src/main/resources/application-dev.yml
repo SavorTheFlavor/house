@@ -1,6 +1,10 @@
 server:
   port: 8080
 
+# actuator port
+management:
+  server:
+    port: 8084
 #spring:
 #  datasource:
 #    # mysql-connector在高版本情况下url需加上后缀serverTimezone=...
