@@ -5,6 +5,7 @@ import java.util.List;
 import com.me.house.biz.service.AgencyService;
 import com.me.house.biz.service.HouseService;
 import com.me.house.biz.service.MailService;
+import com.me.house.biz.service.RecommendService;
 import com.me.house.common.constant.CommonConstants;
 import com.me.house.common.model.Agency;
 import com.me.house.common.model.House;
@@ -27,8 +28,8 @@ public class AgencyController {
   @Autowired
   private AgencyService agencyService;
   
-//  @Autowired
-//  private RecommendService recommendService;
+  @Autowired
+  private RecommendService recommendService;
   
   @Autowired
   private HouseService houseService;
@@ -52,8 +53,8 @@ public class AgencyController {
       pageSize = 6;
     }
     PageData<User> ps = agencyService.getAllAgent(PageParams.build(pageSize, pageNum));
-//    List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
-//    modelMap.put("recomHouses", houses);
+    List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
+    modelMap.put("recomHouses", houses);
     modelMap.put("ps", ps);
     return "/user/agent/agentList";
   }
@@ -61,7 +62,7 @@ public class AgencyController {
   @RequestMapping("/agency/agentDetail")
   public String agentDetail(Long id,ModelMap modelMap){
       User user =  agencyService.getAgentDetail(id);
-      //List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
+      List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
       House query = new House();
       query.setUserId(id);
       query.setBookmarked(false);
@@ -69,7 +70,7 @@ public class AgencyController {
       if (bindHouse != null) {
         modelMap.put("bindHouses", bindHouse.getList()) ;
       }
-      //modelMap.put("recomHouses", houses);
+      modelMap.put("recomHouses", houses);
       modelMap.put("agent", user);
       modelMap.put("agencyName", user.getAgencyName());
       return "/user/agent/agentDetail";
@@ -85,8 +86,8 @@ public class AgencyController {
   @RequestMapping("/agency/agencyDetail")
   public String agencyDetail(Integer id,ModelMap modelMap){
       Agency agency =  agencyService.getAgency(id);
-//      List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
-//      modelMap.put("recomHouses", houses);
+      List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
+      modelMap.put("recomHouses", houses);
       modelMap.put("agency", agency);
       return "/user/agency/agencyDetail";
   }
@@ -96,8 +97,8 @@ public class AgencyController {
   @RequestMapping("agency/list")
   public String agencyList(ModelMap modelMap){
     List<Agency> agencies = agencyService.getAllAgency();
-//    List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
-//    modelMap.put("recomHouses", houses);
+    List<House> houses =  recommendService.getHotHouse(CommonConstants.RECOM_SIZE);
+    modelMap.put("recomHouses", houses);
     modelMap.put("agencyList", agencies);
     return "/user/agency/agencyList";
   }

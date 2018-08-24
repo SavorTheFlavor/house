@@ -21,6 +21,9 @@ public class RecommendService {
   @Value("${myserver.host}")
   private String host;
 
+  @Value("${myserver.redisPort}")
+  private Integer port;
+
   @Autowired
   private HouseService houseService;
 
@@ -35,7 +38,7 @@ public class RecommendService {
    */
   public void increase(Long id){
     try {
-      Jedis jedis = new Jedis(host, 6379);
+      Jedis jedis = new Jedis(host, port);
       // zset
       jedis.zincrby(HOT_HOUSE_KEY, 1.00, id + "");
       // 只保留最热门的前十个
@@ -48,7 +51,7 @@ public class RecommendService {
 
   public List<Long> getHot(){
     try {
-      Jedis jedis = new Jedis(host, 6379);
+      Jedis jedis = new Jedis(host, port);
       //查询出所有热门房产
       Set<String> idSet = jedis.zrevrange(HOT_HOUSE_KEY, 0, -1);
       List<Long> idList = idSet.stream().map(Long::parseLong).collect(Collectors.toList());

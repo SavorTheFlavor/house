@@ -10,6 +10,7 @@ server:
 #    driver-class-name: com.mysql.jdbc.Driver
 myserver:
   host: 127.0.0.1
+  redisPort: 8803
 
 spring:
   druid:

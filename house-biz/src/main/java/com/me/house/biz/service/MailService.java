@@ -40,6 +40,8 @@ public class MailService {
                 }
             }).build();
 
+    private final Cache<String, String> resetCache =  CacheBuilder.newBuilder().maximumSize(100).expireAfterAccess(15, TimeUnit.MINUTES).build();
+
     @Value("${domain.name}")
     private String domainName;
 
@@ -68,6 +70,28 @@ public class MailService {
         registerCache.put(randomKey, email);
         String verifyUrl = "http://" + domainName + "/accounts/verify?key=" + randomKey;
         sendMail("house selling platform：account activation", verifyUrl, email);
+    }
+
+
+    /**
+     * 发送重置密码邮件
+     *
+     * @param email
+     */
+    @Async("threadPoolTaskExecutor")
+    public void resetNotify(String email) {
+        String randomKey = RandomStringUtils.randomAlphanumeric(10);
+        resetCache.put(randomKey, email);
+        String content = "http://" + domainName + "/accounts/reset?key=" + randomKey;
+        sendMail("房产平台密码重置邮件", content, email);
+    }
+
+    public String getResetEmail(String key){
+        return resetCache.getIfPresent(key);
+    }
+
+    public void invalidateRestKey(String key){
+        resetCache.invalidate(key);
     }
 
     public boolean enable(String key) {
